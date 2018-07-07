@@ -2,6 +2,8 @@
 
 A repo to store patterns and yardage estimates for my knitting projects.
 
+View the projects at https://alisonwilbur.github.io/knitting-maths/
+
 ---
 
 ## Projects
