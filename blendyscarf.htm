@@ -1,0 +1,299 @@
+<html>
+<head>
+  
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<style type="text/css">
+body {
+  padding: 20px;
+  font-family: sans-serif;
+  background-color: #ccc;
+}
+
+.box {
+  width: 300px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.cover {
+  width: 0; 
+  height: 0; 
+  border-top: 400px solid #ccc;
+  border-left: 400px solid transparent;
+  border-right: 400px solid transparent;
+  position: absolute;
+  right: -400px;
+}
+
+.stats,
+.directions {
+  margin: 20px auto;
+  background-color: #fff;
+  min-height: 50px;
+  padding: 10px;
+  white-space: pre-line;
+}
+</style>
+</head>
+
+<body>
+
+<h1> Blendy Scarf</h1>
+<div id="triangles"></div>
+
+
+<script type="text/javascript">
+
+var mustard = "#b93";
+var wine = "#515";
+
+function drawTriangle(stripes) {
+  $("#triangles").append("<div class='box'></div>");
+  $(".box").append("<div class='cover'></div>");
+  $(".box").append("<div class='stripes'></div>");
+  $(".box").append("<div class='stats'></div>");
+
+  var stripesEl = $(".stripes");
+  var a = 0;
+  $.each(stripes, function(index, value) {
+    var el = document.createElement("div");
+    el.style.backgroundColor = value[1];
+    el.style.height = (value[0] * 2) + "px";
+    el.style.width = "100%";
+    a = a + parseInt(value[0]);
+    stripesEl.append(el);
+  });
+
+  // Resize elements based on number of stripes
+  var boxSize = a * 2;
+  $(".box")
+    .css("width", boxSize + "px");
+  $(".cover")
+    .css("border-top-width", boxSize + "px")
+    .css("border-left-width", boxSize + "px")
+    .css("border-right-width", boxSize + "px")
+    .css("right", (-1 * boxSize) + "px");
+
+    return a;
+}
+
+
+
+function doMath(a, stripes) {
+  var areas = {};
+  areas[wine] = 0;
+  areas[mustard] = 0;
+  var height = 0;
+  var b = a;
+  var c = 0;
+  var area = 0;
+
+  $.each(stripes, function(index, value) {  
+    height = value[0];
+    c = b - height;
+    // console.log("a: " + a);
+    // console.log("b: " + b);
+    // console.log("c: " + c);
+    
+    area = 0.5 * ((b - c) * (2 * a - b - c));
+    // console.log("area: " + area);
+
+    areas[value[1]] += area;
+    // console.log("area mustard: " + areas[mustard]);
+    // console.log("area wine: " + areas[wine]);
+    
+    b -= height;
+    c -= height;
+  });
+
+  // console.log(areas);
+  // 7.5g = 252 sq px
+  $(".stats").text(
+    `Mustard: 
+    - ${areas[mustard].toLocaleString('en-US')} pixels²
+    - ${(areas[mustard] * 7.5 / 252).toFixed(0)} grams
+    - ${(areas[mustard] * 7.5 / 252 / 437 * 100).toFixed(1)}% of 437g
+
+    Wine:  
+    - ${areas[wine].toLocaleString('en-US')} pixels²
+    - ${(areas[wine] * 7.5 / 252).toFixed(0)} grams
+    - ${(areas[wine] * 7.5 / 252 / 656 * 100).toFixed(1)}% of 656g
+    `
+  );
+}
+
+function writeDirections(stripes) {
+  $(".box").append("<div class='directions'></div>")
+  let directions = `<h2>Blendy Scarf Instructions</h2>
+
+    Cast on: cast on 6 stitches
+    Setup row: knit to end
+
+    Continue in pattern:
+    RS (odd) rows: use color specified below; k1, YO, k2tog, k to last 2 sts, kfbf, drop YO from previous row, k1 (1 st inc)
+    WS (even) rows: use color from previous row; k across
+
+    Optional lace sections (mustard).
+    –  Row 1: k1, *yo, sl1 k2, psso2*, repeat from * to * as necessary, knit 2 last stitches.
+    –  Row 2: Purl across
+    –  Row 3: *yo, sl1 k2, psso2*, repeat from * to *  to end.
+    –  Row 4: Purl across
+  `;
+  let lastRow = 1;
+  let rows, color;
+  let wasLastRowFade = false;
+
+  $.each(stripes, function(index, value) {
+    rows = value[0] * 2;
+    color = value[1];
+    if (rows > 2) {
+      directions += `
+        Rows ${lastRow} to ${lastRow + rows - 1}: ${(color == mustard ? "mustard" : "wine")} (${rows} rows)`;
+      wasLastRowFade = false;
+    } else  {
+      if (!wasLastRowFade) {
+        directions += `
+          Fade for a while`;
+      } else {
+        directions += `.`;
+      }
+      wasLastRowFade = true;
+    }
+
+    lastRow = lastRow + rows;
+  });
+
+  $(".directions").html(directions);
+}
+
+var blendyStripes = [
+  // opening
+  [18, wine],
+  // fade 4
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  // lace
+  [16, mustard],
+  // fade 4
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  // solid
+  [20, wine],
+  // fade intense
+  [1, mustard],
+  [2, wine],
+  [1, mustard],
+  [2, wine],
+  [1, mustard],
+  [2, wine],
+  [1, mustard],
+  [2, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  // lace
+  [24, mustard],
+  // fade 6
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [2, wine],
+  [1, mustard],
+  [2, wine],
+  [1, mustard],
+  [2, wine],
+  [1, mustard],
+  [2, wine],
+  [1, mustard],
+  // solid
+  [24, wine],
+  // stripes
+  [3, mustard],
+  [4, wine],
+  [3, mustard],
+  [10, wine],
+  [3, mustard],
+  [4, wine],
+  [3, mustard],
+  // solid
+  [24, wine],
+  // fade 6
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+];
+
+var totalHeight = drawTriangle(blendyStripes);
+doMath(totalHeight, blendyStripes);
+writeDirections(blendyStripes);
+</script>
+
+</body>
