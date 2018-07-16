@@ -111,18 +111,19 @@ function doMath(a, stripes) {
   });
 
   // console.log(areas);
-  // first section and fade of wine: 7.5g = 252 sq px = 0.0297
-  // fade and first section of mustard: 11.5g = 630 sq px = 0.0182
+  // first section and fade of wine: 7.5g = 252 sq px = 0.02976
+  // fade and first section of mustard: 11.5g = 630 sq px = 0.01825
+  var gramsToPixels = 0.024;
   $(".stats").text(
     `Mustard: 
     - ${areas[mustard].toLocaleString('en-US')} pixels²
-    - ${(areas[mustard] * 7.5 / 252).toFixed(0)} grams
-    - ${(areas[mustard] * 7.5 / 252 / 437 * 100).toFixed(1)}% of 437g
+    - ${(areas[mustard] * gramsToPixels).toFixed(0)} grams
+    - ${(areas[mustard] * gramsToPixels / 437 * 100).toFixed(1)}% of 437g
 
     Wine:  
     - ${areas[wine].toLocaleString('en-US')} pixels²
-    - ${(areas[wine] * 7.5 / 252).toFixed(0)} grams
-    - ${(areas[wine] * 7.5 / 252 / 656 * 100).toFixed(1)}% of 656g
+    - ${(areas[wine] * gramsToPixels).toFixed(0)} grams
+    - ${(areas[wine] * gramsToPixels / 656 * 100).toFixed(1)}% of 656g
     `
   );
 }
@@ -151,14 +152,14 @@ function writeDirections(stripes) {
   $.each(stripes, function(index, value) {
     rows = value[0] * 2;
     color = value[1];
-    if (rows > 2) {
+    if (rows > 4) {
       directions += `
-        Rows ${lastRow} to ${lastRow + rows - 1}: ${(color == mustard ? "mustard" : "wine")} (${rows} rows)`;
+        Rows ${lastRow} to ${lastRow + rows - 1}: ${(color == mustard ? "mustard" : "wine")} (${rows} rows, ${rows / 2} RS rows)`;
       wasLastRowFade = false;
     } else  {
       if (!wasLastRowFade) {
         directions += `
-          Fade for a while`;
+          Fade by ${rows} for a while`;
       } else {
         directions += `.`;
       }
@@ -184,7 +185,7 @@ var blendyStripes = [
   [1, mustard],
   [1, wine],
   // lace
-  [16, mustard],
+  [18, mustard],
   // fade 4
   [1, mustard],
   [1, wine],
@@ -198,14 +199,7 @@ var blendyStripes = [
   // solid
   [20, wine],
   // fade intense
-  [1, mustard],
-  [2, wine],
-  [1, mustard],
-  [2, wine],
-  [1, mustard],
-  [2, wine],
-  [1, mustard],
-  [2, wine],
+
   [1, mustard],
   [1, wine],
   [1, mustard],
@@ -215,26 +209,61 @@ var blendyStripes = [
   [1, mustard],
   [1, wine],
   [1, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
+  
+  // [1, mustard],
+  // [2, wine],
+  // [1, mustard],
+  // [2, wine],
+  // [1, mustard],
+  // [2, wine],
+  // [1, mustard],
+  // [2, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [2, mustard],
+  // [1, wine],
+  // [2, mustard],
+  // [1, wine],
+  // [2, mustard],
+  // [1, wine],
+  // [2, mustard],
+  // [1, wine],
+
   // lace
   [24, mustard],
   // fade 6
   [1, wine],
-  [2, mustard],
+  [3, mustard],
+  [1, wine],
+  [3, mustard],
+  [1, wine],
+  [3, mustard],
+  [1, wine],
+  [3, mustard],
   [1, wine],
   [2, mustard],
   [1, wine],
   [2, mustard],
   [1, wine],
   [2, mustard],
+  [1, wine],
+  [2, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
+  [1, wine],
+  [1, mustard],
   [1, wine],
   [1, mustard],
   [1, wine],
@@ -253,9 +282,17 @@ var blendyStripes = [
   [1, mustard],
   [2, wine],
   [1, mustard],
-  // solid
-  [24, wine],
-  // stripes
+  [3, wine],
+  [1, mustard],
+  [3, wine],
+  [1, mustard],
+  [3, wine],
+  [1, mustard],
+  [3, wine],
+  [1, mustard],
+
+  // wine and sailor stripes
+  [28, wine],
   [3, mustard],
   [4, wine],
   [3, mustard],
@@ -263,33 +300,64 @@ var blendyStripes = [
   [3, mustard],
   [4, wine],
   [3, mustard],
-  // solid
-  [24, wine],
-  // fade 6
+  [28, wine],
+
+  // end section
+
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [12, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [12, wine],
+
+
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [1, mustard],
+  // [1, wine],
+  // [2, mustard],
+  // [1, wine],
+  // [2, mustard],
+  // [1, wine],
+  // [2, mustard],
+  // [1, wine],
+  // [3, mustard],
+  // [1, wine],
+  // [3, mustard],
+  // [1, wine],
+  // [3, mustard],
+
+
   [1, mustard],
   [1, wine],
   [1, mustard],
   [1, wine],
   [1, mustard],
   [1, wine],
-  [1, mustard],
+  [2, mustard],
   [1, wine],
-  [1, mustard],
+  [2, mustard],
   [1, wine],
-  [1, mustard],
+  [2, mustard],
   [1, wine],
-  [1, mustard],
+  [3, mustard],
   [1, wine],
-  [1, mustard],
+  [3, mustard],
   [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
+  [6, mustard],
 ];
 
 var totalHeight = drawTriangle(blendyStripes);
