@@ -134,7 +134,7 @@ function doMath(a, stripes) {
   // console.log(areas);
   // first section and fade of wine: 7.5g = 252 sq px = 0.02976
   // fade and first section of mustard: 11.5g = 630 sq px = 0.01825
-  var gramsToPixels = 0.024;
+  var gramsToPixels = 0.018;
   $(".stats").text(
     `Mustard: 
     - ${areas[mustard].toLocaleString('en-US')} pixels²
@@ -193,7 +193,7 @@ function writeDirections(stripes) {
   $(".directions").html(directions);
 }
 
-var blendyStripes = [
+var stripes = [
   // 1/2 eyelets
   [70, 'eye', mustard],
   // 3 garter
@@ -216,11 +216,9 @@ var blendyStripes = [
   // [8,  'eye', mustard],
   // 6 eyelets
   // [28, 'eye', mustard],
-
   [4,  'gar', mustard],
-  [36, 'eye', wine], // new
+  [40, 'eye', wine], // new
   [4,  'gar', mustard],
-
   // 7 = 3 
   [4, 'gar', wine],
   // 8 = 4
@@ -244,9 +242,9 @@ var blendyStripes = [
   // 11 = 3 
   [4,  'gar', wine],
   // 12 twisted
-  [16, 'lin', mustard],
+  [12, 'lin', mustard],
   // 13 = 3 
-  [4,  'gar', wine],
+  [6,  'gar', wine],
   // 14 ribbing and band
   [2,  'rib', mustard],
   [2,  'rib', wine],
@@ -255,9 +253,9 @@ var blendyStripes = [
   [2,  'rib', mustard],
   [2,  'rib', wine],
   [2,  'rib', mustard],
-  [4,  'gar', wine],
+  [6,  'gar', wine],
   // 15 = 12
-  [16, 'lin', mustard],
+  [12, 'lin', mustard],
   // 16 = 3 
   [4,  'gar', wine],
   // 17 garter
@@ -269,8 +267,83 @@ var blendyStripes = [
   [4,  'lin', wine],
   // 20 ribbing and garter edge
   [8,  'rib', mustard],
-  [6,  'gar', wine],
+  [8,  'gar', wine],
 ];
+
+var blendyStripes = [
+  // 1/2 eyelets
+  [70, 'eye', wine],
+  // 3 garter
+  [4,  'gar', mustard],
+  // 4 stripe ribbing
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  // 5 garter & eyelets 
+  [4,  'gar', mustard],
+  [8,  'eye', wine],
+  // 6 eyelets
+  [28, 'eye', wine],
+  // 7 = 3 
+  [4, 'gar', mustard],
+  // 8 = 4
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  // 9 = 5
+  [4,  'gar', mustard],
+  [8,  'eye', wine],
+  // 10 = 6
+  [28, 'eye', wine],
+  // 11 = 3 
+  [4,  'gar', mustard],
+  // 12 twisted
+  [12, 'lin', wine],
+  // 13 = 3 
+  [6,  'gar', mustard],
+  // 14 ribbing and band
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [6,  'gar', mustard],
+  // 15 = 12
+  [12, 'lin', wine],
+  // 16 = 3 
+  [4,  'gar', mustard],
+  // 17 garter
+  [4,  'gar', wine],
+  // 18
+  [40, 'lac', mustard],
+  // 19
+  [4,  'lin', wine],
+  [4,  'lin', mustard],
+  // 20 ribbing and garter edge
+  [8,  'rib', wine],
+  [8,  'gar', mustard],
+];
+
 
 var totalHeight = drawTriangle(blendyStripes);
 doMath(totalHeight, blendyStripes);
