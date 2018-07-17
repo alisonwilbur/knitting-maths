@@ -1,7 +1,6 @@
 <html>
 <head>
-<title>Blendy Scarf Estimates</title>
-
+<title>Architect Scarf Estimates</title>
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -38,19 +37,39 @@ body {
   padding: 10px;
   white-space: pre-line;
 }
+
+.eye {
+  background-image: url('eye.png');
+  background-size: 125px;
+}
+
+.lac {
+  background-image: url('lace.png');
+  background-size: 150px;
+}
+
+.rib {
+  background-image: url('line.png');
+  background-size: 600px;
+}
+
+.lin {
+  background-image: url('line.png');
+  background-size: 250px;
+}
 </style>
 </head>
 
 <body>
 
-<h1> Blendy Scarf</h1>
+<h1>Architect Scarf</h1>
 <div id="triangles"></div>
 
 
 <script type="text/javascript">
 
 var mustard = "#b93";
-var wine = "#515";
+var wine = "#626";
 
 function drawTriangle(stripes) {
   $("#triangles").append("<div class='box'></div>");
@@ -62,15 +81,16 @@ function drawTriangle(stripes) {
   var a = 0;
   $.each(stripes, function(index, value) {
     var el = document.createElement("div");
-    el.style.backgroundColor = value[1];
-    el.style.height = (value[0] * 2) + "px";
+    el.style.backgroundColor = value[2];
+    el.style.height = (value[0] * 1.5) + "px";
     el.style.width = "100%";
+    el.className = value[1];
     a = a + parseInt(value[0]);
     stripesEl.append(el);
   });
 
   // Resize elements based on number of stripes
-  var boxSize = a * 2;
+  var boxSize = a * 1.5;
   $(".box")
     .css("width", boxSize + "px");
   $(".cover")
@@ -103,7 +123,7 @@ function doMath(a, stripes) {
     area = 0.5 * ((b - c) * (2 * a - b - c));
     // console.log("area: " + area);
 
-    areas[value[1]] += area;
+    areas[value[2]] += area;
     // console.log("area mustard: " + areas[mustard]);
     // console.log("area wine: " + areas[wine]);
     
@@ -131,7 +151,7 @@ function doMath(a, stripes) {
 
 function writeDirections(stripes) {
   $(".box").append("<div class='directions'></div>")
-  let directions = `<h2>Blendy Scarf Instructions</h2>
+  let directions = `<h2>Architect Scarf Instructions</h2>
 
     Cast on: cast on 6 stitches
     Setup row: knit to end
@@ -152,7 +172,7 @@ function writeDirections(stripes) {
 
   $.each(stripes, function(index, value) {
     rows = value[0] * 2;
-    color = value[1];
+    color = value[2];
     if (rows > 4) {
       directions += `
         Rows ${lastRow} to ${lastRow + rows - 1}: ${(color == mustard ? "mustard" : "wine")} (${rows} rows, ${rows / 2} RS rows)`;
@@ -174,191 +194,82 @@ function writeDirections(stripes) {
 }
 
 var blendyStripes = [
-  // opening
-  [18, wine],
-  // fade 4
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  // lace
-  [18, mustard],
-  // fade 4
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  // solid
-  [20, wine],
-  // fade intense
+  // 1/2 eyelets
+  [70, 'eye', mustard],
+  // 3 garter
+  [4,  'gar', wine],
+  // 4 stripe ribbing
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  // 5 garter & eyelets 
+  [4,  'gar', wine],
+  // [8,  'eye', mustard],
+  // 6 eyelets
+  // [28, 'eye', mustard],
 
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  
-  // [1, mustard],
-  // [2, wine],
-  // [1, mustard],
-  // [2, wine],
-  // [1, mustard],
-  // [2, wine],
-  // [1, mustard],
-  // [2, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [2, mustard],
-  // [1, wine],
-  // [2, mustard],
-  // [1, wine],
-  // [2, mustard],
-  // [1, wine],
-  // [2, mustard],
-  // [1, wine],
+  [4,  'gar', mustard],
+  [36, 'eye', wine], // new
+  [4,  'gar', mustard],
 
-  // lace
-  [24, mustard],
-  // fade 6
-  [1, wine],
-  [3, mustard],
-  [1, wine],
-  [3, mustard],
-  [1, wine],
-  [3, mustard],
-  [1, wine],
-  [3, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [2, wine],
-  [1, mustard],
-  [2, wine],
-  [1, mustard],
-  [2, wine],
-  [1, mustard],
-  [2, wine],
-  [1, mustard],
-  [3, wine],
-  [1, mustard],
-  [3, wine],
-  [1, mustard],
-  [3, wine],
-  [1, mustard],
-  [3, wine],
-  [1, mustard],
-
-  // wine and sailor stripes
-  [28, wine],
-  [3, mustard],
-  [4, wine],
-  [3, mustard],
-  [10, wine],
-  [3, mustard],
-  [4, wine],
-  [3, mustard],
-  [28, wine],
-
-  // end section
-
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [12, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [12, wine],
-
-
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [1, mustard],
-  // [1, wine],
-  // [2, mustard],
-  // [1, wine],
-  // [2, mustard],
-  // [1, wine],
-  // [2, mustard],
-  // [1, wine],
-  // [3, mustard],
-  // [1, wine],
-  // [3, mustard],
-  // [1, wine],
-  // [3, mustard],
-
-
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [1, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [2, mustard],
-  [1, wine],
-  [3, mustard],
-  [1, wine],
-  [3, mustard],
-  [1, wine],
-  [6, mustard],
+  // 7 = 3 
+  [4, 'gar', wine],
+  // 8 = 4
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  // 9 = 5
+  [4,  'gar', wine],
+  [8,  'eye', mustard],
+  // 10 = 6
+  [28, 'eye', mustard],
+  // 11 = 3 
+  [4,  'gar', wine],
+  // 12 twisted
+  [16, 'lin', mustard],
+  // 13 = 3 
+  [4,  'gar', wine],
+  // 14 ribbing and band
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [4,  'gar', wine],
+  // 15 = 12
+  [16, 'lin', mustard],
+  // 16 = 3 
+  [4,  'gar', wine],
+  // 17 garter
+  [4,  'gar', mustard],
+  // 18
+  [40, 'lac', wine],
+  // 19
+  [4,  'lin', mustard],
+  [4,  'lin', wine],
+  // 20 ribbing and garter edge
+  [8,  'rib', mustard],
+  [6,  'gar', wine],
 ];
 
 var totalHeight = drawTriangle(blendyStripes);
