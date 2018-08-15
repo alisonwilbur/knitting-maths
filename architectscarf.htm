@@ -71,13 +71,15 @@ body {
 var mustard = "#b93";
 var wine = "#626";
 
-function drawTriangle(stripes) {
-  $("#triangles").append("<div class='box'></div>");
-  $(".box").append("<div class='cover'></div>");
-  $(".box").append("<div class='stripes'></div>");
-  $(".box").append("<div class='stats'></div>");
+function drawTriangle(boxId, stripes) {
+  $("#triangles").append("<div id='" + boxId + "' class='box'></div>");
+  $("#" + boxId).append("<h2>" + boxId + "</h2>");
+  $("#" + boxId).append("<div class='cover'></div>");
+  $("#" + boxId).append("<div class='stripes'></div>");
+  $("#" + boxId).append("<div class='stats'></div>");
+  $("#" + boxId).append("<div class='directions'></div>")
 
-  var stripesEl = $(".stripes");
+  var stripesEl = $("#" + boxId + " .stripes");
   var a = 0;
   $.each(stripes, function(index, value) {
     var el = document.createElement("div");
@@ -91,9 +93,9 @@ function drawTriangle(stripes) {
 
   // Resize elements based on number of stripes
   var boxSize = a * 1.5;
-  $(".box")
+  $("#" + boxId)
     .css("width", boxSize + "px");
-  $(".cover")
+  $("#" + boxId + " .cover")
     .css("border-top-width", boxSize + "px")
     .css("border-left-width", boxSize + "px")
     .css("border-right-width", boxSize + "px")
@@ -104,7 +106,7 @@ function drawTriangle(stripes) {
 
 
 
-function doMath(a, stripes) {
+function doMath(boxId, a, stripes) {
   var areas = {};
   areas[wine] = 0;
   areas[mustard] = 0;
@@ -116,41 +118,51 @@ function doMath(a, stripes) {
   $.each(stripes, function(index, value) {  
     height = value[0];
     c = b - height;
-    // console.log("a: " + a);
-    // console.log("b: " + b);
-    // console.log("c: " + c);
     
     area = 0.5 * ((b - c) * (2 * a - b - c));
-    // console.log("area: " + area);
 
     areas[value[2]] += area;
-    // console.log("area mustard: " + areas[mustard]);
-    // console.log("area wine: " + areas[wine]);
+
+    if (height > 2) {
+      console.log("height: " + height);
+      // console.log("a: " + a);
+      // console.log("b: " + b);
+      // console.log("c: " + c);
+      // console.log("area: " + area);
+      console.log("area mustard: " + areas[mustard]);
+      console.log("area wine: " + areas[wine]);      
+    }
     
     b -= height;
     c -= height;
   });
 
+  // Market spice shawl: 335g total or 1198/1200 yards
+  // This shawl: 1038
   // console.log(areas);
+  // HEY! You! A ball has 100g, not 50! Don't make that mistake a THIRD time
   // first section and fade of wine: 7.5g = 252 sq px = 0.02976
   // fade and first section of mustard: 11.5g = 630 sq px = 0.01825
-  var gramsToPixels = 0.018;
-  $(".stats").text(
+  // after 2nd striped ribbing mustard: 56g = 5112sq px = 0.0109
+  // after 2nd striped ribbing wine: 89.5g = 13706sq px = 0.0065
+  // after 2nd ribbing and lace wine = 105g = 23210px = 0.0045
+  var gramToPxMust = 0.0090; // decreasing a little for lace
+  var gramToPxWine = 0.0045;
+  $("#" + boxId + " .stats").text(
     `Mustard: 
     - ${areas[mustard].toLocaleString('en-US')} pixels²
-    - ${(areas[mustard] * gramsToPixels).toFixed(0)} grams
-    - ${(areas[mustard] * gramsToPixels / 437 * 100).toFixed(1)}% of 437g
+    - ${(areas[mustard] * gramToPxMust).toFixed(0)} grams
+    - ${(areas[mustard] * gramToPxMust / 437 * 100).toFixed(1)}% of 437g
 
     Wine:  
     - ${areas[wine].toLocaleString('en-US')} pixels²
-    - ${(areas[wine] * gramsToPixels).toFixed(0)} grams
-    - ${(areas[wine] * gramsToPixels / 656 * 100).toFixed(1)}% of 656g
+    - ${(areas[wine] * gramToPxWine).toFixed(0)} grams
+    - ${(areas[wine] * gramToPxWine / 656 * 100).toFixed(1)}% of 656g
     `
   );
 }
 
-function writeDirections(stripes) {
-  $(".box").append("<div class='directions'></div>")
+function writeDirections(boxId, stripes) {
   let directions = `<h2>Architect Scarf Instructions</h2>
 
     Cast on: cast on 6 stitches
@@ -190,89 +202,12 @@ function writeDirections(stripes) {
     lastRow = lastRow + rows;
   });
 
-  $(".directions").html(directions);
+  $("#" + boxId + " .directions").html(directions);
 }
 
-var stripes = [
+var originalStripes = [
   // 1/2 eyelets
-  [70, 'eye', mustard],
-  // 3 garter
-  [4,  'gar', wine],
-  // 4 stripe ribbing
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  // 5 garter & eyelets 
-  [4,  'gar', wine],
-  // [8,  'eye', mustard],
-  // 6 eyelets
-  // [28, 'eye', mustard],
-  [4,  'gar', mustard],
-  [40, 'eye', wine], // new
-  [4,  'gar', mustard],
-  // 7 = 3 
-  [4, 'gar', wine],
-  // 8 = 4
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  [2, 'rib', mustard],
-  [2, 'rib', wine],
-  // 9 = 5
-  [4,  'gar', wine],
-  [8,  'eye', mustard],
-  // 10 = 6
-  [28, 'eye', mustard],
-  // 11 = 3 
-  [4,  'gar', wine],
-  // 12 twisted
-  [12, 'lin', mustard],
-  // 13 = 3 
-  [6,  'gar', wine],
-  // 14 ribbing and band
-  [2,  'rib', mustard],
-  [2,  'rib', wine],
-  [2,  'rib', mustard],
-  [2,  'rib', wine],
-  [2,  'rib', mustard],
-  [2,  'rib', wine],
-  [2,  'rib', mustard],
-  [6,  'gar', wine],
-  // 15 = 12
-  [12, 'lin', mustard],
-  // 16 = 3 
-  [4,  'gar', wine],
-  // 17 garter
-  [4,  'gar', mustard],
-  // 18
-  [40, 'lac', wine],
-  // 19
-  [4,  'lin', mustard],
-  [4,  'lin', wine],
-  // 20 ribbing and garter edge
-  [8,  'rib', mustard],
-  [8,  'gar', wine],
-];
-
-var blendyStripes = [
-  // 1/2 eyelets
-  [70, 'eye', wine],
+  [90, 'eye', wine],
   // 3 garter
   [4,  'gar', mustard],
   // 4 stripe ribbing
@@ -287,12 +222,11 @@ var blendyStripes = [
   [2, 'rib', wine],
   [2, 'rib', mustard],
   [2, 'rib', wine],
-  [2, 'rib', mustard],
   // 5 garter & eyelets 
   [4,  'gar', mustard],
   [8,  'eye', wine],
   // 6 eyelets
-  [28, 'eye', wine],
+  [36, 'eye', wine],
   // 7 = 3 
   [4, 'gar', mustard],
   // 8 = 4
@@ -307,16 +241,15 @@ var blendyStripes = [
   [2, 'rib', wine],
   [2, 'rib', mustard],
   [2, 'rib', wine],
-  [2, 'rib', mustard],
   // 9 = 5
   [4,  'gar', mustard],
   [8,  'eye', wine],
   // 10 = 6
-  [28, 'eye', wine],
+  [36, 'eye', wine],
   // 11 = 3 
   [4,  'gar', mustard],
   // 12 twisted
-  [12, 'lin', wine],
+  [16, 'lin', wine],
   // 13 = 3 
   [6,  'gar', mustard],
   // 14 ribbing and band
@@ -327,9 +260,9 @@ var blendyStripes = [
   [2,  'rib', wine],
   [2,  'rib', mustard],
   [2,  'rib', wine],
-  [6,  'gar', mustard],
+  [4,  'gar', mustard],
   // 15 = 12
-  [12, 'lin', wine],
+  [16, 'lin', wine],
   // 16 = 3 
   [4,  'gar', mustard],
   // 17 garter
@@ -337,17 +270,153 @@ var blendyStripes = [
   // 18
   [40, 'lac', mustard],
   // 19
-  [4,  'lin', wine],
   [4,  'lin', mustard],
+  [4,  'gar', wine],
   // 20 ribbing and garter edge
   [8,  'rib', wine],
   [8,  'gar', mustard],
 ];
 
+var newStripes = [
+  // 1/2 eyelets
+  [90, 'eye', wine],
+  // 3 garter
+  [4,  'gar', mustard],
+  // 4 stripe ribbing
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  // 5 garter & eyelets 
+  [4,  'gar', mustard],
+  [8,  'eye', wine],
+  // 6 eyelets
+  [36, 'eye', wine],
+  // 7 = 3 
+  [4, 'gar', mustard],
+  // 8 = 4
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  // 9 = 5
+  [4,  'gar', mustard],
+  [8,  'eye', wine],
+  // 10 = 6
+  [36, 'eye', wine],
+  // START duplicate stripe rib and eyelet
+  // 7 = 3 
+  [4, 'gar', mustard],
+  // 8 = 4
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  [2, 'rib', mustard],
+  [2, 'rib', wine],
+  // 9 = 5
+  [4,  'gar', mustard],
+  [8,  'eye', wine],
+  // 10 = 6
+  [36, 'eye', wine],
+  // END duplicate stripe rib and eyelet
+  // 11 = 3 
+  [4,  'gar', mustard],
+  // 12 twisted
+  [16, 'lin', wine],
+  // 13 = 3
+  // WHY is the next one 6? seems like it should be 4...
+  // [6,  'gar', mustard],
+  [4,  'gar', mustard],
+  // 14 ribbing and band
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [2,  'rib', mustard],
+  [2,  'rib', wine],
+  [4,  'gar', mustard],
+  // START
+  // [4,  'gar', wine],
+  // [4,  'gar', mustard],
+  // // 14 ribbing and band
+  // [2,  'rib', wine],
+  // [2,  'rib', mustard],
+  // [2,  'rib', wine],
+  // [2,  'rib', mustard],
+  // [2,  'rib', wine],
+  // [2,  'rib', mustard],
+  // [2,  'rib', wine],
+  // [4,  'gar', mustard],
+  // END
+  // 15 = 12
+  [16, 'lin', wine],
+  // 16 = 3 
+  [4,  'gar', mustard],
+  // 17 garter
+  [4,  'gar', wine],
+  // 18
+  [40, 'lac', mustard],
+  // 19
+  [4,  'lin', mustard],
+  [4,  'gar', wine],
+  // 20 ribbing and garter edge
+  [8,  'rib', wine],
+  [8,  'gar', mustard]
+];
 
-var totalHeight = drawTriangle(blendyStripes);
-doMath(totalHeight, blendyStripes);
-writeDirections(blendyStripes);
+// 1st purple lace
+// height: 90
+// architectscarf.htm:132 area mustard: 0
+// architectscarf.htm:133 area wine: 4050
+// 2nd purple lace
+// height: 36
+// architectscarf.htm:132 area mustard: 5112
+// architectscarf.htm:133 area wine: 23210
+// 3rd purple lace
+// height: 36
+// architectscarf.htm:132 area mustard: 5112
+// architectscarf.htm:133 area wine: 23210
+// 4th/ purple lace:
+// architectscarf.htm:132 area mustard: 9666
+// architectscarf.htm:133 area wine: 39006
+// Mustard: 
+// - 38,316 pixels²
+// - 345 grams
+// - 78.9% of 437g
+// Wine: 
+// - 59,366 pixels²
+// - 267 grams
+// - 40.7% of 656g
+
+
+var totalHeight = drawTriangle("box-new", newStripes);
+doMath("box-new", totalHeight, newStripes);
+// writeDirections("box-new", newStripes);
+
+var totalHeightOriginal = drawTriangle("box-original", originalStripes);
+doMath("box-original", totalHeightOriginal, originalStripes);
+// writeDirections("box-original", originalStripes);
 </script>
 
 </body>

@@ -1,0 +1,316 @@
+<html>
+<head>
+<title>Market Spice Scarf Estimates</title>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<style type="text/css">
+body {
+  padding: 20px;
+  font-family: sans-serif;
+  background-color: #ccc;
+}
+
+.box {
+  width: 300px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.cover {
+  width: 0; 
+  height: 0; 
+  border-top: 400px solid #ccc;
+  border-left: 400px solid transparent;
+  border-right: 400px solid transparent;
+  position: absolute;
+  right: -400px;
+}
+
+.stats,
+.directions {
+  margin: 20px auto;
+  background-color: #fff;
+  min-height: 50px;
+  padding: 10px;
+  white-space: pre-line;
+}
+
+.eye {
+  background-image: url('eye.png');
+  background-size: 125px;
+}
+
+.lac {
+  background-image: url('lace.png');
+  background-size: 150px;
+}
+
+.rib {
+  background-image: url('line.png');
+  background-size: 600px;
+}
+
+.lin {
+  background-image: url('line.png');
+  background-size: 250px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Architect Scarf</h1>
+<div id="triangles"></div>
+
+
+<script type="text/javascript">
+
+var cream = "#fffcea";
+var c1 = "#e54747";
+var c2 = "#e59847";
+var c3 = "#e5cd47";
+var c4 = "#a3e547";
+var c5 = "#48e264";
+var c6 = "#47e0ba";
+
+function drawTriangle(boxId, stripes) {
+  $("#triangles").append("<div id='" + boxId + "' class='box'></div>");
+  $("#" + boxId).append("<h2>" + boxId + "</h2>");
+  $("#" + boxId).append("<div class='cover'></div>");
+  $("#" + boxId).append("<div class='stripes'></div>");
+  $("#" + boxId).append("<div class='stats'></div>");
+  $("#" + boxId).append("<div class='directions'></div>")
+
+  var stripesEl = $("#" + boxId + " .stripes");
+  var a = 0;
+  $.each(stripes, function(index, value) {
+    var el = document.createElement("div");
+    el.style.backgroundColor = value[2];
+    el.style.height = (value[0] * 1.5) + "px";
+    el.style.width = "100%";
+    el.className = value[1];
+    a = a + parseInt(value[0]);
+    stripesEl.append(el);
+  });
+
+  // Resize elements based on number of stripes
+  var boxSize = a * 1.5;
+  $("#" + boxId)
+    .css("width", boxSize + "px");
+  $("#" + boxId + " .cover")
+    .css("border-top-width", boxSize + "px")
+    .css("border-left-width", boxSize + "px")
+    .css("border-right-width", boxSize + "px")
+    .css("right", (-1 * boxSize) + "px");
+
+    return a;
+}
+
+
+
+function doMath(boxId, a, stripes) {
+  var areas = {};
+  areas[cream] = 0;
+  areas[c1] = 0;
+  areas[c2] = 0;
+  areas[c3] = 0;
+  areas[c4] = 0;
+  areas[c5] = 0;
+  areas[c6] = 0;
+  var height = 0;
+  var b = a;
+  var c = 0;
+  var area = 0;
+
+  $.each(stripes, function(index, value) {  
+    height = value[0];
+    c = b - height;
+    
+    area = 0.5 * ((b - c) * (2 * a - b - c));
+
+    areas[value[2]] += area;
+
+    if (height > 2) {
+      // console.log("height: " + height);
+      // console.log("a: " + a);
+      // console.log("b: " + b);
+      // console.log("c: " + c);
+      // console.log("area: " + area);
+      // console.log("area mustard: " + areas[mustard]);
+      // console.log("area wine: " + areas[wine]);      
+    }
+    
+    b -= height;
+    c -= height;
+  });
+
+  // 335g total or 1198/1200 yards
+  // console.log(areas);
+  var gramToPx = 0.004; // 0.0090; // decreasing a little for lace
+  $("#" + boxId + " .stats").text(
+    `cream: 
+    - ${areas[cream].toLocaleString('en-US')} pixels²
+    - ${(areas[cream] * gramToPx).toFixed(0)} grams
+    - ${(areas[cream] * gramToPx / 113 * 100).toFixed(1)}% of 113g
+
+    c1:  
+    - ${areas[c1].toLocaleString('en-US')} pixels²
+    - ${(areas[c1] * gramToPx).toFixed(0)} grams
+    - ${(areas[c1] * gramToPx / 37 * 100).toFixed(1)}% of 37g
+
+    c2:  
+    - ${areas[c2].toLocaleString('en-US')} pixels²
+    - ${(areas[c2] * gramToPx).toFixed(0)} grams
+    - ${(areas[c2] * gramToPx / 37 * 100).toFixed(1)}% of 37g
+
+    c3:  
+    - ${areas[c3].toLocaleString('en-US')} pixels²
+    - ${(areas[c3] * gramToPx).toFixed(0)} grams
+    - ${(areas[c3] * gramToPx / 37 * 100).toFixed(1)}% of 37g
+
+    c4:  
+    - ${areas[c4].toLocaleString('en-US')} pixels²
+    - ${(areas[c4] * gramToPx).toFixed(0)} grams
+    - ${(areas[c4] * gramToPx / 37 * 100).toFixed(1)}% of 37g
+
+    c5:  
+    - ${areas[c5].toLocaleString('en-US')} pixels²
+    - ${(areas[c5] * gramToPx).toFixed(0)} grams
+    - ${(areas[c5] * gramToPx / 37 * 100).toFixed(1)}% of 37g
+
+    c6:  
+    - ${areas[c6].toLocaleString('en-US')} pixels²
+    - ${(areas[c6] * gramToPx).toFixed(0)} grams
+    - ${(areas[c6] * gramToPx / 37 * 100).toFixed(1)}% of 37g
+    `
+  );
+}
+
+function writeDirections(boxId, stripes) {
+  let directions = `<h2>Architect Scarf Instructions</h2>
+
+    Cast on: cast on 6 stitches
+    Setup row: knit to end
+
+    Continue in pattern:
+    RS (odd) rows: use color specified below; k1, YO, k2tog, k to last 2 sts, kfbf, drop YO from previous row, k1 (1 st inc)
+    WS (even) rows: use color from previous row; k across
+
+    Optional lace sections (mustard).
+    –  Row 1: k1, *yo, sl1 k2, psso2*, repeat from * to * as necessary, knit 2 last stitches.
+    –  Row 2: Purl across
+    –  Row 3: *yo, sl1 k2, psso2*, repeat from * to *  to end.
+    –  Row 4: Purl across
+  `;
+  let lastRow = 1;
+  let rows, color;
+  let wasLastRowFade = false;
+
+  $.each(stripes, function(index, value) {
+    rows = value[0] * 2;
+    color = value[2];
+    if (rows > 4) {
+      directions += `
+        Rows ${lastRow} to ${lastRow + rows - 1}: ${(color == mustard ? "mustard" : "wine")} (${rows} rows, ${rows / 2} RS rows)`;
+      wasLastRowFade = false;
+    } else  {
+      if (!wasLastRowFade) {
+        directions += `
+          Fade by ${rows} for a while`;
+      } else {
+        directions += `.`;
+      }
+      wasLastRowFade = true;
+    }
+
+    lastRow = lastRow + rows;
+  });
+
+  $("#" + boxId + " .directions").html(directions);
+}
+
+var originalStripes = [
+  [30, 'gar', c1],
+  [6,  'lac', cream],
+  [18, 'gar', c2],
+  [6,  'lac', cream],
+  [18, 'gar', c3],
+  [6,  'lac', cream],
+  [18, 'gar', c4],
+  [6,  'lac', cream],
+  [18, 'gar', c5],
+  [6,  'lac', cream],
+  [18, 'gar', c6],
+  [6,  'lac', cream],
+
+  [2, 'lac', c1],
+  [8, 'eye', cream],
+  [2, 'lac', c1],
+  [8, 'eye', cream],
+  [2, 'lac', c1],
+  [8, 'eye', cream],
+  [2, 'lac', c1],
+  [8, 'eye', cream],
+  [2, 'lac', c2],
+  [8, 'eye', cream],
+  [2, 'lac', c2],
+  [8, 'eye', cream],
+  [2, 'lac', c2],
+  [8, 'eye', cream],
+  [2, 'lac', c2],
+  [8, 'eye', cream],
+  [2, 'lac', c3],
+  [8, 'eye', cream],
+  [2, 'lac', c3],
+  [8, 'eye', cream],
+  [2, 'lac', c3],
+  [8, 'eye', cream],
+  [2, 'lac', c3],
+  [8, 'eye', cream],
+  [2, 'lac', c4],
+  [8, 'eye', cream],
+  [2, 'lac', c4],
+  [8, 'eye', cream],
+  [2, 'lac', c4],
+  [8, 'eye', cream],
+  [2, 'lac', c4],
+  [8, 'eye', cream],
+  [2, 'lac', c5],
+  [8, 'eye', cream],
+  [2, 'lac', c5],
+  [8, 'eye', cream],
+  [2, 'lac', c5],
+  [8, 'eye', cream],
+  [2, 'lac', c5],
+  [8, 'eye', cream],
+  [2, 'lac', c6],
+  [8, 'eye', cream],
+  [2, 'lac', c6],
+  [8, 'eye', cream],
+  [2, 'lac', c6],
+  [8, 'eye', cream],
+  [2, 'lac', c6],
+  [10, 'eye', cream],
+
+  [24, 'gar', c1],
+  [2, 'eye', cream],
+  [20, 'gar', c2],
+  [2, 'eye', cream],
+  [16, 'gar', c3],
+  [2, 'eye', cream],
+  [12, 'gar', c4],
+  [2, 'eye', cream],
+  [8, 'gar', c5],
+  [2, 'eye', cream],
+  [4, 'gar', c6],
+];
+
+var totalHeightOriginal = drawTriangle("box-original", originalStripes);
+doMath("box-original", totalHeightOriginal, originalStripes);
+// writeDirections("box-original", originalStripes);
+</script>
+
+</body>
