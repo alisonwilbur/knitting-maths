@@ -17,16 +17,18 @@ body {
   width: 300px;
   margin: 0 auto;
   position: relative;
+  overflow: hidden;
 }
 
 .cover {
   width: 0; 
   height: 0; 
-  border-top: 400px solid #ccc;
+  border-top: 400px solid #cfcfcf;
   border-left: 400px solid transparent;
   border-right: 400px solid transparent;
   position: absolute;
   right: -400px;
+  opacity: 0.9;
 }
 
 .stats,
@@ -71,6 +73,8 @@ body {
 
 var mustard = "#b93";
 var wine = "#626";
+// Measured after the last wine eyelet block and the triangle is acute at this ratio
+var measuredWidthToHeightRatio = 25 / 39;
 
 function drawTriangle(boxId, stripes) {
   $("#triangles").append("<div id='" + boxId + "' class='box'></div>");
@@ -81,29 +85,52 @@ function drawTriangle(boxId, stripes) {
   $("#" + boxId).append("<div class='notes'></div>")
   $("#" + boxId).append("<div class='directions'></div>")
 
+  // Draw the stripes from the written list
   var stripesEl = $("#" + boxId + " .stripes");
-  var a = 0;
+  var height = 0;
+  var totalHeight = 0;
+  var color = '';
+  var area = 0;
+  var areas = {};
+  areas[wine] = 0;
+  areas[mustard] = 0;
+
   $.each(stripes, function(index, value) {
+    color = value[2];
+    height = parseInt(value[0]) * 2;
+    totalHeight = totalHeight + height;
+    width = totalHeight * measuredWidthToHeightRatio;
+
     var el = document.createElement("div");
-    el.style.backgroundColor = value[2];
-    el.style.height = (value[0] * 1.5) + "px";
-    el.style.width = "100%";
+    el.style.backgroundColor = color;
+    el.style.height = height + "px";
+    el.style.width = width + "px";
     el.className = value[1];
-    a = a + parseInt(value[0]);
     stripesEl.append(el);
+
+    area = height * width; // I think???
+    areas[color] += area;
+    console.log(`height: ${height}`);
+    console.log(`totalHeight: ${totalHeight}`);
+    console.log(`areas[${color == mustard ? 'mustard' : 'wine'}]: ${areas[color]}`);
   });
 
-  // Resize elements based on number of stripes
-  var boxSize = a * 1.5;
-  $("#" + boxId)
-    .css("width", boxSize + "px");
-  $("#" + boxId + " .cover")
-    .css("border-top-width", boxSize + "px")
-    .css("border-left-width", boxSize + "px")
-    .css("border-right-width", boxSize + "px")
-    .css("right", (-1 * boxSize) + "px");
+  // Resize the box
+  var totalWidth = totalHeight * measuredWidthToHeightRatio;
+  // console.log(`totalHeight: ${totalHeight}`);
+  // console.log(`measuredWidthToHeightRatio: ${measuredWidthToHeightRatio}`);
+  // console.log(`totalWidth: ${totalWidth}`);
+  $("#" + boxId + " .stripes").css("width", totalWidth + "px");
+  $("#" + boxId + " .cover").css("width", totalWidth + "px");
+  $("#" + boxId).css("width", totalWidth + "px");
 
-  return a;
+  $("#" + boxId + " .cover")
+    .css("border-top-width", totalHeight + "px")
+    .css("border-left-width", totalWidth + "px")
+    .css("border-right-width", totalWidth + "px")
+    .css("right", (-2 * totalWidth) + "px");
+
+  return totalHeight;
 }
 
 
@@ -213,6 +240,9 @@ function writeDirections(boxId, stripes) {
   $("#" + boxId + " .directions").html(directions);
 }
 
+
+
+
 var originalStripes = [
   // 1/2 eyelets
   [90, 'eye', wine],
@@ -259,7 +289,7 @@ var originalStripes = [
   // 12 twisted
   [16, 'lin', wine],
   // 13 = 3 
-  [6,  'gar', mustard],
+  [4,  'gar', mustard],
   // 14 ribbing and band
   [2,  'rib', wine],
   [2,  'rib', mustard],
@@ -278,12 +308,14 @@ var originalStripes = [
   // 18
   [40, 'lac', mustard],
   // 19
-  [4,  'lin', mustard],
+  [4,  'lac', mustard],
   [4,  'gar', wine],
   // 20 ribbing and garter edge
-  [8,  'rib', wine],
-  [8,  'gar', mustard],
+  [8,  'rib', mustard],
+  [6,  'gar', wine],
 ];
+
+
 
 var newStripes = [
   // 1/2 eyelets
@@ -364,19 +396,6 @@ var newStripes = [
   [2,  'rib', mustard],
   [2,  'rib', wine],
   [4,  'gar', mustard],
-  // START
-  // [4,  'gar', wine],
-  // [4,  'gar', mustard],
-  // // 14 ribbing and band
-  // [2,  'rib', wine],
-  // [2,  'rib', mustard],
-  // [2,  'rib', wine],
-  // [2,  'rib', mustard],
-  // [2,  'rib', wine],
-  // [2,  'rib', mustard],
-  // [2,  'rib', wine],
-  // [4,  'gar', mustard],
-  // END
   // 15 = 12
   [16, 'lin', wine],
   // 16 = 3 
@@ -386,45 +405,26 @@ var newStripes = [
   // 18
   [40, 'lac', mustard],
   // 19
-  [4,  'lin', mustard],
+  [4,  'lac', mustard],
   [4,  'gar', wine],
   // 20 ribbing and garter edge
-  [8,  'rib', wine],
-  [8,  'gar', mustard]
+  [8,  'rib', mustard],
+  [6,  'gar', wine],
 ];
 
-// 1st purple lace
-// height: 90
-// architectscarf.htm:132 area mustard: 0
-// architectscarf.htm:133 area wine: 4050
-// 2nd purple lace
-// height: 36
-// architectscarf.htm:132 area mustard: 5112
-// architectscarf.htm:133 area wine: 23210
-// 3rd purple lace
-// height: 36
-// architectscarf.htm:132 area mustard: 5112
-// architectscarf.htm:133 area wine: 23210
-// 4th/ purple lace:
-// architectscarf.htm:132 area mustard: 9666
-// architectscarf.htm:133 area wine: 39006
-// Mustard: 
-// - 38,316 pixels²
-// - 345 grams
-// - 78.9% of 437g
-// Wine: 
-// - 59,366 pixels²
-// - 267 grams
-// - 40.7% of 656g
-
-
+console.log("*** NEW TRIANGLE ***")
 var totalHeight = drawTriangle("box-new", newStripes);
 doMath("box-new", totalHeight, newStripes);
 // writeDirections("box-new", newStripes);
 
+console.log("---------------");
+console.log("---------------");
+console.log("---------------");
+console.log("---------------");
+console.log("*** ORIGINAL TRIANGLE ***");
 var totalHeightOriginal = drawTriangle("box-original", originalStripes);
 doMath("box-original", totalHeightOriginal, originalStripes);
-// writeDirections("box-original", originalStripes);
+
 </script>
 
 </body>
