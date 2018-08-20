@@ -86,33 +86,45 @@ function drawTriangle(boxId, stripes) {
   $("#" + boxId).append("<div class='directions'></div>")
 
   // Draw the stripes from the written list
-  var stripesEl = $("#" + boxId + " .stripes");
-  var height = 0;
-  var totalHeight = 0;
-  var color = '';
-  var area = 0;
-  var areas = {};
+  const stripesEl = $("#" + boxId + " .stripes");
+  let height = 0;
+  let topWidth = 0;
+  let bottomWidth = 0;
+  let totalHeight = 0;
+  let area = 0;
+  let color = '';
+  let areas = {};
   areas[wine] = 0;
   areas[mustard] = 0;
 
   $.each(stripes, function(index, value) {
     color = value[2];
     height = parseInt(value[0]) * 2;
-    totalHeight = totalHeight + height;
-    width = totalHeight * measuredWidthToHeightRatio;
+    totalHeightAfter = totalHeight + height;
+    topWidth = totalHeight * measuredWidthToHeightRatio;
+    bottomWidth = totalHeightAfter * measuredWidthToHeightRatio;
 
     var el = document.createElement("div");
     el.style.backgroundColor = color;
     el.style.height = height + "px";
-    el.style.width = width + "px";
+    el.style.width = bottomWidth + "px";
     el.className = value[1];
     stripesEl.append(el);
 
-    area = height * width; // I think???
+    // area of rectangle + area of triangle at the right side
+    area = (height * topWidth) + (height * bottomWidth * 0.5); 
     areas[color] += area;
-    console.log(`height: ${height}`);
-    console.log(`totalHeight: ${totalHeight}`);
-    console.log(`areas[${color == mustard ? 'mustard' : 'wine'}]: ${areas[color]}`);
+    if (height > 4) {
+      // console.log(`height: ${height}`);
+      // console.log(`topWidth: ${topWidth}`);
+      // console.log(`bottomWidth: ${bottomWidth}`);
+      // console.log(`totalHeight: ${totalHeight}`);
+      // console.log(`totalHeightAfter: ${totalHeightAfter}`);
+      // console.log(`area: ${area}`);
+      // console.log(`${color == mustard ? 'mustard' : 'wine'} area: ${areas[color]}`);
+    }
+
+    totalHeight = totalHeightAfter;
   });
 
   // Resize the box
@@ -130,43 +142,6 @@ function drawTriangle(boxId, stripes) {
     .css("border-right-width", totalWidth + "px")
     .css("right", (-2 * totalWidth) + "px");
 
-  return totalHeight;
-}
-
-
-
-function doMath(boxId, a, stripes) {
-  var areas = {};
-  areas[wine] = 0;
-  areas[mustard] = 0;
-  var height = 0;
-  var b = a;
-  var c = 0;
-  var area = 0;
-  let notes = '';
-
-  $.each(stripes, function(index, value) {  
-    height = value[0];
-    c = b - height;
-    
-    area = 0.5 * ((b - c) * (2 * a - b - c));
-
-    areas[value[2]] += area;
-
-    if (height > 4) {
-      notes += `height: ${height} <br />`;
-      // console.log("a: " + a);
-      // console.log("b: " + b);
-      // console.log("c: " + c);
-      // console.log("area: " + area);
-      notes += `area wine: ${areas[wine]} = ${areas[wine] * 0.0025} <br />`;
-      notes += `area mustard: ${areas[mustard]} = ${areas[mustard] * 0.0025} <br />`;
-    }
-    
-    b -= height;
-    c -= height;
-  });
-  $("#" + boxId + " .notes").html(notes);
 
   // Market spice shawl: 335g total or 1198/1200 yards
   // This shawl: 1038
@@ -176,13 +151,15 @@ function doMath(boxId, a, stripes) {
   // fade and first section of mustard: 11.5g = 630 sq px = 0.01825
   // after 2nd striped ribbing mustard: 56g = 5112sq px = 0.0109
 
-
   // http://www.wolframalpha.com/input/?i=triangle+with+sides+39+42+27+inches
   // after 2nd striped ribbing mustard: 23g = 5112sq px = 0.0109
   // after 2nd striped ribbing wine: 89.5g = 13706sq px = 0.0065
   // after 4th eyelet lace wine = 100 = 39000 = 0.0025
-  var gramToPxMust = 0.004; // decreasing a little for lace
-  var gramToPxWine = 0.0025;
+
+  // after 4th eyelet lace 72 = 100g = 142169px = 0.0007
+
+  var gramToPxMust = 0.0006;
+  var gramToPxWine = 0.0007;
   $("#" + boxId + " .stats").text(
     `Mustard: 
     - ${areas[mustard].toLocaleString('en-US')} pixels²
@@ -358,7 +335,7 @@ var newStripes = [
   [8,  'eye', wine],
   // 10 = 6
   [36, 'eye', wine],
-  // START duplicate stripe rib and eyelet
+  // START duplicate stripe rib and eyelet -----
   // 7 = 3 
   [4, 'gar', mustard],
   // 8 = 4
@@ -377,15 +354,13 @@ var newStripes = [
   [4,  'gar', mustard],
   [8,  'eye', wine],
   // 10 = 6
-  [36, 'eye', wine],
-  // END duplicate stripe rib and eyelet
+  [31, 'eye', wine],
+  // END duplicate stripe rib and eyelet ------
   // 11 = 3 
   [4,  'gar', mustard],
   // 12 twisted
   [16, 'lin', wine],
   // 13 = 3
-  // WHY is the next one 6? seems like it should be 4...
-  // [6,  'gar', mustard],
   [4,  'gar', mustard],
   // 14 ribbing and band
   [2,  'rib', wine],
@@ -412,18 +387,12 @@ var newStripes = [
   [6,  'gar', wine],
 ];
 
-console.log("*** NEW TRIANGLE ***")
-var totalHeight = drawTriangle("box-new", newStripes);
-doMath("box-new", totalHeight, newStripes);
-// writeDirections("box-new", newStripes);
+drawTriangle("box-new", newStripes);
+writeDirections("box-new", newStripes);
 
-console.log("---------------");
-console.log("---------------");
-console.log("---------------");
-console.log("---------------");
-console.log("*** ORIGINAL TRIANGLE ***");
-var totalHeightOriginal = drawTriangle("box-original", originalStripes);
-doMath("box-original", totalHeightOriginal, originalStripes);
+// console.log("---------------");
+// console.log("---------------");
+drawTriangle("box-original", originalStripes);
 
 </script>
 
